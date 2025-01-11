@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Diretório de ambiente da Vercel
+.vercel/
+
+# Arquivos de ambiente
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Diretórios do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Outros arquivos temporários e de configuração
+*.swp
+*.swo
