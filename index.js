@@ -9,7 +9,7 @@ require('dotenv').config();
 const port = process.env.PORT || 3000;
 
 // Configuração CORS para múltiplas origens
-const allowedOrigins = ['https://template-nextjs-flowbite-tailwind.vercel.app/', 'https://www.lccopper.com'];
+const allowedOrigins = ['http://localhost:3000/', 'https://www.lccopper.com/'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
