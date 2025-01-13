@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const port = process.env.PORT || 3006;
+const port = process.env.PORT || 3000;
 
 // Configuração CORS para múltiplas origens
 const allowedOrigins = ['http://localhost:3000', 'https://www.lccopper.com'];
@@ -56,7 +56,7 @@ const questions = process.env.CAPTCHA_QUESTIONS.split('|').map(q => {
 });
 
 app.get('/', (req, res) => {
-  res.send('teste rota get');
+  res.send('Api para gestão de formularios de email');
 });
 
 // Endpoint para obter uma pergunta aleatória do captcha
