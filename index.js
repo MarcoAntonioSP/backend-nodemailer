@@ -8,6 +8,11 @@ require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 
+app.use(cors({
+  origin: 'http://localhost:3000', // Permitir esta origem específica
+  methods: 'GET,POST,PUT,DELETE', // Métodos permitidos
+  allowedHeaders: 'Content-Type,Authorization', // Cabeçalhos permitidos
+}));
 // Configuração CORS para múltiplas origens
 const allowedOrigins = ['http://localhost:3000/', 'https://www.lccopper.com/'];
 const corsOptions = {
