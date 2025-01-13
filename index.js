@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 
 // Configuração CORS para múltiplas origens
 const allowedOrigins = ['http://localhost:3000', 'https://www.lccopper.com'];
@@ -111,6 +111,5 @@ app.post('/send', (req, res) => {
   });
 });
 
-// app.listen(3006, () => {
-//   console.log(`Servidor rodando em na porta 3006`);
-// });
+// Exporte a função para o Vercel
+module.exports = app;
