@@ -9,7 +9,7 @@ require('dotenv').config();
 const port = process.env.PORT || 3001;
 
 // Configuração de CORS
-const allowedOrigins = ['http://localhost:3000','http://localhost:3000/', 'https://www.lccopper.com', 'https://template-nextjs-flowbite-tailwind.vercel.app', 'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato'];
+const allowedOrigins = ['http://localhost:3000','http://localhost:3000/', 'https://www.lccopper.com', 'https://template-nextjs-flowbite-tailwind.vercel.app','https://template-nextjs-flowbite-tailwind.vercel.app/', 'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
