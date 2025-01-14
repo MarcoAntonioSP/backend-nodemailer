@@ -6,29 +6,23 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
-app.use(cors({
-  origin: 'http://localhost:3000', // Permitir esta origem específica
-  methods: 'GET,POST,PUT,DELETE', // Métodos permitidos
-  allowedHeaders: 'Content-Type,Authorization', // Cabeçalhos permitidos
-}));
-// Configuração CORS para múltiplas origens
-const allowedOrigins = ['http://localhost:3000/', 'https://www.lccopper.com/'];
+// Configuração de CORS
+const allowedOrigins = ['http://localhost:3000', 'https://www.lccopper.com', 'https://template-nextjs-flowbite-tailwind.vercel.app','http://localhost:3000/'];
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // Limitação de tentativas de Captcha por IP
 const captchaLimiter = rateLimit({
@@ -115,6 +109,8 @@ app.post('/send', (req, res) => {
     res.status(500).send(error);
   });
 });
-
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
 // Exporte a função para o Vercel
 module.exports = app;
