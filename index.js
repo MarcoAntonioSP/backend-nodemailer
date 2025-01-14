@@ -45,6 +45,8 @@ const emailLimiter = rateLimit({
 // Aplicar limitações nos endpoints
 app.use('/send', emailLimiter);
 
+app.set('trust proxy', 1); // Adicione esta linha
+
 app.get('/', (req, res) => {
   res.send('API para gestão de formulários de e-mail.');
 });
@@ -55,7 +57,7 @@ app.post('/send', (req, res) => {
 
   // Configuração SMTP com base na origem
   const origin = req.get('origin');
-  console.log(origin); // Adicione esta linha para depuração
+  console.log('Origem recebida:', origin); // Adicionando log para depuração
   let smtpUser, smtpPass, toEmail;
 
   if (origin === 'http://localhost:3000') {
@@ -95,6 +97,5 @@ app.post('/send', (req, res) => {
     res.status(500).json({ error: 'Erro ao enviar o e-mail.' });
   });
 });
-
 
 module.exports = app;
