@@ -8,10 +8,6 @@
   ],
   "routes": [
     {
-      "src": "/captcha",
-      "dest": "/index.js"
-    },
-    {
       "src": "/send",
       "dest": "/index.js"
     }
