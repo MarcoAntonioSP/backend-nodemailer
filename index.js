@@ -11,25 +11,25 @@ const port = process.env.PORT || 3001;
 // Configuração CORS para múltiplas origens
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato',
-  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app'
+  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app', // Adicione este domínio
 ];
+
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  credentials: true, // Permite cookies e cabeçalhos de autenticação
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
+app.options('*', cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
