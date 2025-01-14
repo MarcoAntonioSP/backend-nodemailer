@@ -55,6 +55,7 @@ app.post('/send', (req, res) => {
 
   // Configuração SMTP com base na origem
   const origin = req.get('origin');
+  console.log(origin); // Adicione esta linha para depuração
   let smtpUser, smtpPass, toEmail;
 
   if (origin === 'http://localhost:3000') {
@@ -65,16 +66,22 @@ app.post('/send', (req, res) => {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
+  } else if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app') {
+    smtpUser = process.env.TEMPLATE_USER_EMAIL;
+    smtpPass = process.env.TEMPLATE_USER_PASSWORD;
+    toEmail = process.env.TEMPLATE_TO_EMAIL;
   } else {
     return res.status(400).json({ error: 'Origem inválida' });
   }
 
+  // Configuração do transporter do nodemailer
   const transporter = nodemailer.createTransport({
     host: "smtp.umbler.com",
     port: 587,
     auth: { user: smtpUser, pass: smtpPass },
   });
 
+  // Envio do e-mail
   transporter.sendMail({
     from: smtpUser,
     to: toEmail,
