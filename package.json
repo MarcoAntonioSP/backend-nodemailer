@@ -4,9 +4,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "vercel-build": "echo 'No build needed for Node.js API'",
+    "vercel-build": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "cors": "^2.8.5",
     "debug": "^4.4.0",
@@ -16,6 +20,6 @@
     "nodemailer": "^6.9.16"
   },
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   }
 }
