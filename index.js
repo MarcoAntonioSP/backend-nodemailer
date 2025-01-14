@@ -54,7 +54,7 @@ app.post('/send', (req, res) => {
 
   let smtpUser, smtpPass, toEmail;
 
-  if (origin === 'http://localhost:3000') {
+  if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app') {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
