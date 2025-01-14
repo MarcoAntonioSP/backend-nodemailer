@@ -8,7 +8,6 @@ require('dotenv').config();
 
 const port = process.env.PORT || 3001;
 
-// Configuração CORS consolidada
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3000/',
@@ -19,9 +18,9 @@ const allowedOrigins = [
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Permite a origem
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Bloqueia a origem
+      callback(new Error('Not allowed by CORS'));
     }
   },
   methods: 'GET,POST,PUT,DELETE',
@@ -30,31 +29,29 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Middleware para parsing do corpo da requisição
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Limitação de envio de e-mails por IP
 const emailLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hora
-  max: 2, // Limite: 2 envios de e-mails por hora
+  windowMs: 60 * 60 * 1000,
+  max: 2,
   message: 'Você atingiu o limite de envio de e-mails (2) por hora. Tente novamente em uma hora.',
   statusCode: 429,
 });
 
 app.use('/send', emailLimiter);
-app.set('trust proxy', 1); // Adicione esta linha
+app.set('trust proxy', 1);
 
 app.get('/', (req, res) => {
   res.send('API para gestão de formulários de e-mail.');
 });
 
-// Endpoint para envio de e-mails (sem CAPTCHA)
 app.post('/send', (req, res) => {
   const { name, company, email, phone, message } = req.body;
 
   const origin = req.get('origin');
-  console.log('Origem recebida:', origin); // Log para depuração
+  console.log('Origem recebida:', origin);
+
   let smtpUser, smtpPass, toEmail;
 
   if (origin === 'http://localhost:3000') {
@@ -72,6 +69,8 @@ app.post('/send', (req, res) => {
   } else {
     return res.status(400).json({ error: 'Origem inválida' });
   }
+
+  console.log('Credenciais SMTP:', { smtpUser, smtpPass, toEmail });
 
   const transporter = nodemailer.createTransport({
     host: "smtp.umbler.com",
