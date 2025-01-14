@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 // Configuração CORS consolidada
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
 ];
