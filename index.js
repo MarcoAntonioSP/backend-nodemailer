@@ -42,9 +42,7 @@ const emailLimiter = rateLimit({
   statusCode: 429,
 });
 
-// Aplicar limitações nos endpoints
 app.use('/send', emailLimiter);
-
 app.set('trust proxy', 1); // Adicione esta linha
 
 app.get('/', (req, res) => {
@@ -55,9 +53,8 @@ app.get('/', (req, res) => {
 app.post('/send', (req, res) => {
   const { name, company, email, phone, message } = req.body;
 
-  // Configuração SMTP com base na origem
   const origin = req.get('origin');
-  console.log('Origem recebida:', origin); // Adicionando log para depuração
+  console.log('Origem recebida:', origin); // Log para depuração
   let smtpUser, smtpPass, toEmail;
 
   if (origin === 'http://localhost:3000') {
@@ -76,14 +73,12 @@ app.post('/send', (req, res) => {
     return res.status(400).json({ error: 'Origem inválida' });
   }
 
-  // Configuração do transporter do nodemailer
   const transporter = nodemailer.createTransport({
     host: "smtp.umbler.com",
     port: 587,
     auth: { user: smtpUser, pass: smtpPass },
   });
 
-  // Envio do e-mail
   transporter.sendMail({
     from: smtpUser,
     to: toEmail,
