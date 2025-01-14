@@ -8,9 +8,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/index.js",
-      "methods": ["GET", "POST"]
+      "src": "/captcha",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/send",
+      "dest": "/index.js"
     }
   ]
 }
