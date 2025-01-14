@@ -2,14 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "index.js",
+      "src": "api/send.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "src/pages/**/*",
+      "use": "@vercel/next"
     }
   ],
-  "routes": [
-    {
-      "src": "/send",
-      "dest": "/index.js"
-    }
-  ]
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://template-nextjs-flowbite-tailwind.vercel.app"
+  }
 }
