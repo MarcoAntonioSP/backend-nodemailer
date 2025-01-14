@@ -11,25 +11,25 @@ const port = process.env.PORT || 3001;
 // Configuração CORS para múltiplas origens
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato',
-  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app'
+  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app', // Adicione este domínio
 ];
+
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  credentials: true, // Permite cookies e cabeçalhos de autenticação
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
+app.options('*', cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -77,6 +77,11 @@ app.get('/captcha', (req, res) => {
 app.post('/send', (req, res) => {
   const { name, company, email, phone, message, captchaId, captchaAnswer } = req.body;
 
+  // Validação de campos obrigatórios
+  if (!name || !email || !message || !captchaId || !captchaAnswer) {
+    return res.status(400).send({ error: 'Todos os campos são obrigatórios.' });
+  }
+
   // Validar resposta do captcha
   const correctAnswer = questions[captchaId]?.answer;
   if (!correctAnswer || captchaAnswer !== correctAnswer) {
@@ -84,9 +89,7 @@ app.post('/send', (req, res) => {
   }
 
   // Configurar credenciais de envio com base na origem
-  let smtpUser;
-  let smtpPass;
-  let toEmail;
+  let smtpUser, smtpPass, toEmail;
   const origin = req.get('origin');
   if (origin === 'http://localhost:3000') {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
@@ -97,7 +100,7 @@ app.post('/send', (req, res) => {
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
   } else {
-    return res.status(400).send({ error: 'Invalid origin' });
+    return res.status(400).send({ error: 'Origem inválida' });
   }
 
   const transporter = nodemailer.createTransport({
@@ -112,12 +115,17 @@ app.post('/send', (req, res) => {
     replyTo: email,
     subject: `Contato de ${name} - ${company}`,
     text: `Nome: ${name}\nEmpresa: ${company}\nE-mail: ${email}\nTelefone: ${phone}\n\nMensagem:\n${message}`,
-  }).then(info => {
-    res.send(info);
-  }).catch(error => {
-    res.status(500).send(error);
-  });
+  })
+    .then(info => {
+      console.log('E-mail enviado com sucesso:', info);
+      res.send(info);
+    })
+    .catch(error => {
+      console.error('Erro ao enviar e-mail:', error);
+      res.status(500).send({ error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.' });
+    });
 });
+
 
 // Exporte a função para o Vercel
 module.exports = app;
