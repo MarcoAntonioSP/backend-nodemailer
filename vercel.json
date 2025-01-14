@@ -2,18 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.js",
+      "src": "index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/captcha",
-      "dest": "/api/captcha.js"
+      "dest": "/index.js"
     },
     {
       "src": "/send",
-      "dest": "/api/send.js"
+      "dest": "/index.js"
     }
   ]
 }
