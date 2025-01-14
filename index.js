@@ -6,88 +6,83 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
-// Configuração CORS para múltiplas origens
+// Configuração CORS consolidada
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato',
-  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app'
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Permite a origem
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS')); // Bloqueia a origem
     }
   },
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
+// Middleware para parsing do corpo da requisição
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Limitação de tentativas de Captcha por IP
 const captchaLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // Limita a 5 tentativas de obter uma pergunta de captcha por IP
+  max: 5, // Limite: 5 tentativas
   message: 'Muitas requisições para o Captcha, tente novamente mais tarde.',
 });
 
 // Limitação de envio de e-mails por IP
 const emailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hora
-  max: 2, // Limita a 2 envios de e-mails por IP por hora
+  max: 2, // Limite: 2 envios de e-mails por hora
   message: 'Você atingiu o limite de envio de e-mails (2) por hora. Tente novamente em uma hora.',
-  statusCode: 429, // Status HTTP para limite atingido
-  handler: (req, res, /*next*/) => {
-    res.status(429).send({
-      error: 'Você atingiu o limite de envio de e-mails (2) por hora. Tente novamente em uma hora.',
-    });
-  },
+  statusCode: 429,
 });
 
-// Aplicar as limitações nos respectivos endpoints
-app.use('/captcha', captchaLimiter); // Limitar tentativas de Captcha
-app.use('/send', emailLimiter); // Limitar envios de e-mails
+// Aplicar limitações nos endpoints
+app.use('/captcha', captchaLimiter);
+app.use('/send', emailLimiter);
 
-// Perguntas e respostas armazenadas como variáveis de ambiente
+// Perguntas do Captcha (carregadas de variáveis de ambiente)
 const questions = process.env.CAPTCHA_QUESTIONS.split('|').map(q => {
   const [question, answer] = q.split(';');
   return { question, answer };
 });
 
 app.get('/', (req, res) => {
-  res.send('Api para gestão de formularios de email');
+  res.send('API para gestão de formulários de e-mail.');
 });
 
-// Endpoint para obter uma pergunta aleatória do captcha
+// Endpoint para obter uma pergunta do Captcha
 app.get('/captcha', (req, res) => {
   const randomIndex = Math.floor(Math.random() * questions.length);
   const question = questions[randomIndex];
-  res.send({ question: question.question, id: randomIndex });
+  res.json({ question: question.question, id: randomIndex });
 });
 
+// Endpoint para envio de e-mails
 app.post('/send', (req, res) => {
   const { name, company, email, phone, message, captchaId, captchaAnswer } = req.body;
 
-  // Validar resposta do captcha
+  // Validação da resposta do Captcha
   const correctAnswer = questions[captchaId]?.answer;
   if (!correctAnswer || captchaAnswer !== correctAnswer) {
-    return res.status(400).send({ error: 'Captcha inválido' });
+    return res.status(400).json({ error: 'Captcha inválido' });
   }
 
-  // Configurar credenciais de envio com base na origem
-  let smtpUser;
-  let smtpPass;
-  let toEmail;
+  // Configuração SMTP com base na origem
   const origin = req.get('origin');
+  let smtpUser, smtpPass, toEmail;
+
   if (origin === 'http://localhost:3000') {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
@@ -97,7 +92,7 @@ app.post('/send', (req, res) => {
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
   } else {
-    return res.status(400).send({ error: 'Invalid origin' });
+    return res.status(400).json({ error: 'Origem inválida' });
   }
 
   const transporter = nodemailer.createTransport({
@@ -113,11 +108,12 @@ app.post('/send', (req, res) => {
     subject: `Contato de ${name} - ${company}`,
     text: `Nome: ${name}\nEmpresa: ${company}\nE-mail: ${email}\nTelefone: ${phone}\n\nMensagem:\n${message}`,
   }).then(info => {
-    res.send(info);
+    res.json({ success: true, info });
   }).catch(error => {
-    res.status(500).send(error);
+    console.error('Erro ao enviar o e-mail:', error);
+    res.status(500).json({ error: 'Erro ao enviar o e-mail.' });
   });
 });
 
-// Exporte a função para o Vercel
+
 module.exports = app;
