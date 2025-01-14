@@ -31,7 +31,6 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // Limitação de tentativas de Captcha por IP
 const captchaLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
@@ -95,6 +94,10 @@ app.post('/send', (req, res) => {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
+  } else if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app') {
+    smtpUser = process.env.TEMPLATE_USER_EMAIL;
+    smtpPass = process.env.TEMPLATE_USER_PASSWORD;
+    toEmail = process.env.TEMPLATE_TO_EMAIL;
   } else {
     return res.status(400).send({ error: 'Invalid origin' });
   }
@@ -117,5 +120,6 @@ app.post('/send', (req, res) => {
     res.status(500).send(error);
   });
 });
+
 // Exporte a função para o Vercel
 module.exports = app;
