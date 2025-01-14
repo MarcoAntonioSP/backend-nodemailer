@@ -34,13 +34,6 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Limitação de tentativas de Captcha por IP
-const captchaLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // Limite: 5 tentativas
-  message: 'Muitas requisições para o Captcha, tente novamente mais tarde.',
-});
-
 // Limitação de envio de e-mails por IP
 const emailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hora
@@ -50,35 +43,15 @@ const emailLimiter = rateLimit({
 });
 
 // Aplicar limitações nos endpoints
-app.use('/captcha', captchaLimiter);
 app.use('/send', emailLimiter);
-
-// Perguntas do Captcha (carregadas de variáveis de ambiente)
-const questions = process.env.CAPTCHA_QUESTIONS.split('|').map(q => {
-  const [question, answer] = q.split(';');
-  return { question, answer };
-});
 
 app.get('/', (req, res) => {
   res.send('API para gestão de formulários de e-mail.');
 });
 
-// Endpoint para obter uma pergunta do Captcha
-app.get('/captcha', (req, res) => {
-  const randomIndex = Math.floor(Math.random() * questions.length);
-  const question = questions[randomIndex];
-  res.json({ question: question.question, id: randomIndex });
-});
-
-// Endpoint para envio de e-mails
+// Endpoint para envio de e-mails (sem CAPTCHA)
 app.post('/send', (req, res) => {
-  const { name, company, email, phone, message, captchaId, captchaAnswer } = req.body;
-
-  // Validação da resposta do Captcha
-  const correctAnswer = questions[captchaId]?.answer;
-  if (!correctAnswer || captchaAnswer !== correctAnswer) {
-    return res.status(400).json({ error: 'Captcha inválido' });
-  }
+  const { name, company, email, phone, message } = req.body;
 
   // Configuração SMTP com base na origem
   const origin = req.get('origin');
