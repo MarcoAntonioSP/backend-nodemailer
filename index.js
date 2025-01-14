@@ -8,26 +8,28 @@ require('dotenv').config();
 
 const port = process.env.PORT || 3001;
 
-// Configuração de CORS
+// Configuração CORS para múltiplas origens
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato'
+  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato',
+  'https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app'
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin) || !origin) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -94,10 +96,6 @@ app.post('/send', (req, res) => {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
-  } else if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app') {
-    smtpUser = process.env.TEMPLATE_USER_EMAIL;
-    smtpPass = process.env.TEMPLATE_USER_PASSWORD;
-    toEmail = process.env.TEMPLATE_TO_EMAIL;
   } else {
     return res.status(400).send({ error: 'Invalid origin' });
   }
