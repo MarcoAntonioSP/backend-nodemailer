@@ -45,9 +45,10 @@ const captchaLimiter = rateLimit({
 const emailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hora
   max: 2, // Limite: 2 envios de e-mails por hora
-  message: 'Você atingiu o limite de envio de e-mails (2) por hora. Tente novamente em uma hora.',
+  message: { error: 'Você atingiu o limite de envio de e-mails (2) por hora. Tente novamente em uma hora.' },
   statusCode: 429,
 });
+
 
 // Aplicar limitações nos endpoints
 app.use('/captcha', captchaLimiter);
