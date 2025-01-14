@@ -109,8 +109,5 @@ app.post('/send', (req, res) => {
     res.status(500).send(error);
   });
 });
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
 // Exporte a função para o Vercel
 module.exports = app;
