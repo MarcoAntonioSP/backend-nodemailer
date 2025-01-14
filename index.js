@@ -14,7 +14,6 @@ const allowedOrigins = [
   'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
-  'https://template-nextjs-flowbite-tailwind.vercel.app/',
 ];
 
 const corsOptions = {
@@ -89,7 +88,5 @@ app.post('/send', (req, res) => {
     res.status(500).json({ error: 'Erro ao enviar o e-mail.' });
   });
 });
-
-
 
 module.exports = app;
