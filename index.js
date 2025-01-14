@@ -13,9 +13,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://www.lccopper.com",
   "https://template-nextjs-flowbite-tailwind.vercel.app",
-  "https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app",
-  "https://backend-nodemailer-rho.vercel.app",
-  "https://backend-nodemailer-git-main-marcos-projects-83aa3827.vercel.app"
+  "https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app" // Adicione este domínio
 ];
 
 const corsOptions = {
@@ -101,14 +99,10 @@ app.post("/send", (req, res) => {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
-  } else if (origin === "https://template-nextjs-flowbite-tailwind.vercel.app") {
+  } else if (origin === "https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app") {
     smtpUser = process.env.TEMPLATE_USER_EMAIL;
     smtpPass = process.env.TEMPLATE_USER_PASSWORD;
     toEmail = process.env.TEMPLATE_TO_EMAIL;
-  } else if (origin === "https://template-nextjs-flo-git-f7b41a-marco-antonios-projects-796d869d.vercel.app") {
-    smtpUser = process.env.TEMPLATE_GIT_USER_EMAIL;
-    smtpPass = process.env.TEMPLATE_GIT_USER_PASSWORD;
-    toEmail = process.env.TEMPLATE_GIT_TO_EMAIL;
   } else {
     return res.status(400).send({ error: "Origem inválida" });
   }
@@ -133,6 +127,7 @@ app.post("/send", (req, res) => {
     res.status(500).send({ error: "Erro ao enviar o e-mail. Tente novamente mais tarde." });
   });
 });
+
 
 // Exporte a função para o Vercel
 module.exports = app;
