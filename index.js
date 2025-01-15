@@ -9,10 +9,10 @@ require('dotenv').config();
 // Configuração CORS consolidada
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://localhost:3000/',
   'https://www.lccopper.com',
   'https://template-nextjs-flowbite-tailwind.vercel.app/',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
+  'https://template-nextjs-flowbite-tailwind.vercel.app/pages/contato';
 ];
 
 const corsOptions = {
@@ -52,11 +52,11 @@ app.post('/send', (req, res) => {
   const origin = req.get('origin');
   let smtpUser, smtpPass, toEmail;
 
-  if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app') {
+  if (origin === 'https://template-nextjs-flowbite-tailwind.vercel.app/') {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
-  } else if (origin === 'https://www.lccopper.com') {
+  } else if (origin === 'http://localhost:3000') {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
