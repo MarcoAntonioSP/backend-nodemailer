@@ -31,18 +31,15 @@ const emailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hora
   max: 3, // Limitar a 3 requisições por IP em 1 hora
   keyGenerator: (req) => req.ip, // Usa o IP do cliente como chave para limitar
-  message: "Limite de envio de e-mails atingido! Por favor, aguarde 1 hora antes de tentar novamente.",
-  statusCode: 429,
-});
-// Middleware para garantir que a resposta de erro seja JSON
-app.use((err, req, res, next) => {
-  if (err.status === 429) {
-    return res.status(429).json({
-      error: err.message || "Limite de envio de e-mails atingido. Tente novamente mais tarde.",
+  handler: (req, res, next) => {
+    res.status(429).json({
+      message: "Limite de envio de e-mails atingido! Por favor, aguarde 1 hora antes de tentar novamente.",
     });
-  }
-  next(err);
+  },
 });
+
+
+
 
 app.get("/", (req, res) => {
   res.send("API para gestão de formulários de e-mail.");
