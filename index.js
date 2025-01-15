@@ -6,28 +6,23 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const port = process.env.PORT || 3001;
-
 // Configuração CORS consolidada
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3000/',
   'https://www.lccopper.com',
+  'https://template-nextjs-flowbite-tailwind.vercel.app/',
   'https://template-nextjs-flowbite-tailwind.vercel.app',
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Permite a origem
-    } else {
-      callback(new Error('Not allowed by CORS')); // Bloqueia a origem
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE',
+  origin: allowedOrigins,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', // Adicione OPTIONS
   allowedHeaders: 'Content-Type,Authorization',
-  optionsSuccessStatus: 200,
+  preflightContinue: true, // Permita redirecionamentos na pré-requisição
+  optionsSuccessStatus: 200, // Altere para 200 para indicar sucesso
 };
+
 app.use(cors(corsOptions));
 
 // Middleware para parsing do corpo da requisição

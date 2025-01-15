@@ -11,6 +11,6 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://template-nextjs-flowbite-tailwind.vercel.app"
+    "NEXT_PUBLIC_API_URL": "https://backendnodemailer.vercel.app"
   }
 }
