@@ -26,11 +26,12 @@ app.options("*", cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Limitar o envio de e-mails por IP
 const emailLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 2,
-  message:
-    "Limite de envio de e-mails atingido! Por favor, aguarde 1 hora antes de tentar novamente.",
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 3, // Limitar a 3 requisições por IP em 1 hora
+  keyGenerator: (req) => req.ip, // Usa o IP do cliente como chave para limitar
+  message: "Limite de envio de e-mails atingido! Por favor, aguarde 1 hora antes de tentar novamente.",
   statusCode: 429,
 });
 
