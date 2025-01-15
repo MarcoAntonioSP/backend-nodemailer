@@ -9,8 +9,5 @@
       "src": "send.js",
       "use": "@vercel/node"
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "https://backendnodemailer.vercel.app"
-  }
+  ]
 }
