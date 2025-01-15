@@ -88,5 +88,5 @@ app.post('/send', (req, res) => {
     res.status(500).json({ error: 'Erro ao enviar o e-mail.' });
   });
 });
-
+app.listen(allowedOrigins=>)
 module.exports = app;

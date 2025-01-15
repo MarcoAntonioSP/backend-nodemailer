@@ -2,12 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/send.js",
+      "src": "index.js/send.js",
       "use": "@vercel/node"
     },
     {
-      "src": "src/pages/**/*",
-      "use": "@vercel/next"
+      "src": "index.js",
+      "use": "@vercel/node"
     }
   ],
   "env": {
