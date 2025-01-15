@@ -7,23 +7,19 @@ const cors = require("cors");
 require("dotenv").config();
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOriginsPatterns = [
-      /^http:\/\/localhost:\d+$/,
-      /^https:\/\/template-nextjs-flowbite-tailwind\.vercel\.app$/,
-      /^https:\/\/www\.lccopper\.com$/,
-    ];
-
-    const isAllowed = allowedOriginsPatterns.some((pattern) =>
-      pattern.test(origin)
-    );
-    callback(null, isAllowed);
-  },
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  allowedHeaders: "Content-Type,Authorization",
-  preflightContinue: true,
-  optionsSuccessStatus: 200,
+  origin: [
+    'http://localhost:3000',
+    'https://template-nextjs-flowbite-tailwind.vercel.app',
+    'https://www.lccopper.com',
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
+
+app.use(cors(corsOptions));
+
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
