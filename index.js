@@ -8,20 +8,21 @@ require("dotenv").config();
 
 const corsOptions = {
   origin: [
-    'http://localhost:3000',
-    'https://template-nextjs-flowbite-tailwind.vercel.app',
-    'https://www.lccopper.com',
+    "http://localhost:3000",
+    "https://template-nextjs-flowbite-tailwind.vercel.app",
+    "https://www.lccopper.com",
   ],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: ["Content-Type", "Authorization"],
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
 
+// Adicione esta rota para lidar explicitamente com requisições OPTIONS (preflight)
+app.options("*", cors(corsOptions));
 
-app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -56,11 +57,13 @@ app.post("/send", emailLimiter, (req, res) => {
   const origin = req.get("origin");
   let smtpUser, smtpPass, toEmail;
 
-  if (origin === "https://template-nextjs-flowbite-tailwind.vercel.app") {
+  if (origin === "http://localhost:3000") {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
-  } else if (origin === "http://localhost:3000") {
+  } else if (
+    origin === "https://template-nextjs-flowbite-tailwind.vercel.app"
+  ) {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
     toEmail = process.env.LCCOPPER_TO_EMAIL;
