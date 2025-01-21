@@ -82,7 +82,7 @@ app.post("/send", emailLimiter, (req, res) => {
   let smtpUser, smtpPass, toEmail;
 
   // Verificação da origem da requisição
-  if (origin === "http://localhost:3000") {
+  if (origin === "https://www.lccopper.com") {
     smtpUser = process.env.LOCALHOST_USER_EMAIL;
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
