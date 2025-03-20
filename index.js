@@ -9,7 +9,7 @@ require("dotenv").config();
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    "https://template-nextjs-flowbite-tailwind.vercel.app",
+    "https://kisite.com.br",
     "https://www.lccopper.com",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
@@ -87,7 +87,7 @@ app.post("/send", emailLimiter, (req, res) => {
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
   } else if (
-    origin === "https://template-nextjs-flowbite-tailwind.vercel.app"
+    origin === "https://kisite.com.br"
   ) {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
@@ -137,5 +137,12 @@ app.post("/send", emailLimiter, (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`📧 API de e-mail pronta para receber requisições`);
+  });
+}
 
 module.exports = app;
