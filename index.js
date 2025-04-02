@@ -87,7 +87,7 @@ app.post("/send", emailLimiter, (req, res) => {
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
   } else if (
-    origin === "https://kisite.com.br"
+    origin === "https://www.kisite.com.br/"
   ) {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
