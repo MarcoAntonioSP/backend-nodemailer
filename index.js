@@ -9,7 +9,7 @@ require("dotenv").config();
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    "https://kisite.com.br",
+    "https://www.kisite.com.br",
     "https://www.lccopper.com",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
