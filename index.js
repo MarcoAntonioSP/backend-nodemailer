@@ -19,8 +19,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-// Adicione esta rota para lidar explicitamente com requisições OPTIONS (preflight)
 app.options("*", cors(corsOptions));
 
 app.use(bodyParser.json());
@@ -87,7 +85,7 @@ app.post("/send", emailLimiter, (req, res) => {
     smtpPass = process.env.LOCALHOST_USER_PASSWORD;
     toEmail = process.env.LOCALHOST_TO_EMAIL;
   } else if (
-    origin === "https://www.kisite.com.br/"
+    origin === "https://www.kisite.com.br" // Removi a barra final para correspondência exata
   ) {
     smtpUser = process.env.LCCOPPER_USER_EMAIL;
     smtpPass = process.env.LCCOPPER_USER_PASSWORD;
@@ -141,7 +139,7 @@ const PORT = process.env.PORT || 3001;
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
-    console.log(`📧 API de e-mail pronta para receber requisições`);
+    console.log(`📧 API de e-mail pronta para receber requisições na porta ${PORT}`);
   });
 }
 
